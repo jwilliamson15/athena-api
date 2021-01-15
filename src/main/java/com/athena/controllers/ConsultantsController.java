@@ -25,6 +25,11 @@ public class ConsultantsController {
         return repository.findBy_id(id);
     }
 
+    @RequestMapping(value = "/skills/{skillName}", method = RequestMethod.GET)
+    public List<Consultants> getConsultantsBySkill(@PathVariable("skillName") String skillName) {
+        return repository.findBySkill(skillName);
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public Consultants createConsultant(@Valid @RequestBody Consultants consultants) {
         consultants.set_id(ObjectId.get());

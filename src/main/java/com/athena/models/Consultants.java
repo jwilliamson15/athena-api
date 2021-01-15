@@ -1,5 +1,7 @@
 package com.athena.models;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,12 @@ public class Consultants {
     @Id
     public ObjectId _id;
 
-    public String name;
-    public String jobRole;
+    private String name;
+    private String jobRole;
+    private String personDescription;
+
+    private List<ConsultantSkills> skills;
+    private List<EngagementHistory> engagementHistory;
+
+    //TODO - expand attributes... see ConsultantSkills
 }
