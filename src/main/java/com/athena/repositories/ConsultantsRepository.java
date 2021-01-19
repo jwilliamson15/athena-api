@@ -11,6 +11,6 @@ import org.springframework.data.mongodb.repository.Query;
 public interface ConsultantsRepository extends MongoRepository<Consultants, String> {
     Consultants findBy_id(ObjectId _id);
 
-    @Query("{'skills.name': ?0}")
+    @Query("{'skills.name': { $regex: ?0, $options: 'i'}}")
     List<Consultants> findBySkill(String skillName);
 }
