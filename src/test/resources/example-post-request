@@ -1,0 +1,22 @@
+{
+    "name" : "Josh Williamson",
+    "jobRole" : "Software Engineer",
+    "personDescription" : "Josh is pratically perfect in every way! Just like Dick Van Dyke!",
+    "skills" : [
+        {
+            "name" : "Java",
+            "experienceTime" : 5,
+            "skillExperienceLevel" : "EXPERT"
+        }, {
+            "name" : "Spring Boot",
+            "experienceTime" : 3
+        }
+    ],
+    "engagementHistory" : [
+        {
+            "name" : "Royal Mail Group",
+            "description" : "I delivered stuff!",
+            "duration" : 1
+        }
+    ]
+}
