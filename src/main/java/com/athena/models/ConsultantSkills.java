@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class ConsultantSkills {
 
-    //enum ExperienceLevel {BASELINE,PROGRESSING,EXPERT,GENIUS}
+    //enum ExperienceLevel {BASELINE,PROGRESSING,PROFICIENT, EXPERIENCED, MASTER}
 
     private String name;
     public int experienceTime;
