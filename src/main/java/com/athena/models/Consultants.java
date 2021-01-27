@@ -2,12 +2,13 @@ package com.athena.models;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,5 +26,8 @@ public class Consultants {
     private List<ConsultantSkills> skills;
     private List<EngagementHistory> engagementHistory;
 
-    //TODO - expand attributes... see ConsultantSkills
+    @Override
+    public String toString() {
+        return "(ID: " + _id +" NAME: " + name+")";
+    }
 }

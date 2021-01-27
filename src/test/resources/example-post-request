@@ -1,12 +1,11 @@
 {
     "name" : "Josh Williamson",
     "jobRole" : "Software Engineer",
-    "personDescription" : "Josh is pratically perfect in every way! Just like Dick Van Dyke!",
+    "personDescription" : "Josh is practically perfect in every way! Just like Dick Van Dyke!",
     "skills" : [
         {
             "name" : "Java",
-            "experienceTime" : 5,
-            "skillExperienceLevel" : "EXPERT"
+            "experienceTime" : 5
         }, {
             "name" : "Spring Boot",
             "experienceTime" : 3
