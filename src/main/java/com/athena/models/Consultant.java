@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Consultants {
+@Document(collection = "consultants")
+public class Consultant {
 
     @Id
     public ObjectId _id;
@@ -23,7 +25,7 @@ public class Consultants {
     private String jobRole;
     private String personDescription;
 
-    private List<ConsultantSkills> skills;
+    private List<ConsultantSkill> skills;
     private List<EngagementHistory> engagementHistory;
 
     @Override
