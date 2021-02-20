@@ -1,5 +1,6 @@
 package com.athena.dal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -53,12 +54,12 @@ public class ConsultantDALImpl implements ConsultantDAL {
     @Override
     public List<Consultant> findMultipleSkills(List<String> skillNames) {
         Query query = new Query();
-        query.addCriteria(
-            new Criteria().orOperator(
-                Criteria.where("skills.name").regex(skillNames.get(0), REGEX_CASE_INSENSITIVE_OPTION),
-                Criteria.where("skills.name").regex(skillNames.get(1), REGEX_CASE_INSENSITIVE_OPTION)
-            )
-        );
+
+        List<Criteria> criteria = new ArrayList<>();
+        for(String skillName: skillNames) {
+            criteria.add(Criteria.where("skills.name").regex(skillName, REGEX_CASE_INSENSITIVE_OPTION));
+        }
+        query.addCriteria(new Criteria().orOperator(criteria.toArray(new Criteria[criteria.size()])));
 
         return mongoTemplate.find(query, Consultant.class);
     }
