@@ -1,4 +1,4 @@
-package com.athena.models;
+package com.athena.model;
 
 import java.util.List;
 

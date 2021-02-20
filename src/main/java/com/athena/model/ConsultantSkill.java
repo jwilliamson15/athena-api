@@ -1,4 +1,4 @@
-package com.athena.models;
+package com.athena.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

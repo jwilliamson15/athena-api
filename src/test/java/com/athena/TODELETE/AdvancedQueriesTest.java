@@ -1,4 +1,4 @@
-package com.athena.service;
+package com.athena.TODELETE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.athena.models.ConsultantSkill;
-import com.athena.models.Consultant;
-import com.athena.repository.ConsultantRepository;
+import com.athena.model.ConsultantSkill;
+import com.athena.model.Consultant;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

@@ -1,4 +1,4 @@
-package com.athena.service;
+package com.athena.TODELETE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,8 +9,7 @@ import org.eclipse.collections.impl.utility.ListIterate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.athena.models.Consultant;
-import com.athena.repository.ConsultantRepository;
+import com.athena.model.Consultant;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
