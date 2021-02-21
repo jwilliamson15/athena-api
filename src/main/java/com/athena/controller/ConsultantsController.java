@@ -1,7 +1,6 @@
 package com.athena.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.athena.dal.ConsultantDAL;
 import com.athena.dal.DynamicQueryParameter;
 import com.athena.model.Consultant;
+import com.athena.model.SkillLevel;
 
 @RestController
 @RequestMapping("/consultants")
@@ -42,21 +42,19 @@ public class ConsultantsController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public List<Consultant> getConsultantsBySkill(@RequestParam("skills") List<String> skillNames,
-                                                  @RequestParam(name = "experience", required = false) List<String> experienceTimes) {
-        List<Consultant> searchResult = new ArrayList<>();
+                                                  @RequestParam(name = "experience", required = false) List<String> experienceTimes,
+                                                  @RequestParam(name = "skillLevel", required = false) List<String> skillLevels) {
+        List<Consultant> searchResult;
 
-        LOGGER.info("SKILLS SEARCHED: " + skillNames.toString());
-        LOGGER.info("XP SEARCHED: " + experienceTimes.toString());
-
-        if (skillNames.size() == 1) {
-            searchResult = singleSkillSearch(skillNames.get(0));
+        try {
+            LOGGER.info("SKILLS SEARCHED: " + skillNames.toString());
+            LOGGER.info("XP SEARCHED: " + experienceTimes.toString());
+            LOGGER.info("SKILL LEVELS: " + skillLevels.toString());
+        } catch (NullPointerException npe) {
+            LOGGER.info("npe thrown due to optional params not provided. Only affects logging line");
         }
 
-        if (isNullOrEmpty(experienceTimes)) {
-            searchResult = multiSkillSearch(skillNames);
-        }
-
-        searchResult = experienceSearch(createDynamicQuery(skillNames, experienceTimes));
+        searchResult = dynamicSearch(createDynamicQuery(skillNames, experienceTimes, skillLevels));
 
         return searchResult;
     }
@@ -77,33 +75,27 @@ public class ConsultantsController {
         consultantDAL.deleteConsultant(consultantDAL.findById(id));
     }
 
-    private List<Consultant> singleSkillSearch(String skillName) {
-        List<Consultant> searchResult = consultantDAL.findBySkill(skillName);
-        LOGGER.info("RESULTS COUNT: "+searchResult.size());
-        return searchResult;
-    }
-
-    private List<Consultant> multiSkillSearch(List<String> skillNames) {
-        List<Consultant> searchResult = consultantDAL.findMultipleSkills(skillNames);
-        LOGGER.info("RESULTS COUNT: "+searchResult.size());
-        return searchResult;
-    }
-
-    private List<Consultant> experienceSearch(List<DynamicQueryParameter> dynamicQuery) {
+    private List<Consultant> dynamicSearch(List<DynamicQueryParameter> dynamicQuery) {
         LOGGER.info("DYNAMIC QUERY: "+dynamicQuery.toString());
-        List<Consultant> searchResult = consultantDAL.findBySkillAndExperienceTime(dynamicQuery);
+        List<Consultant> searchResult = consultantDAL.findByDynamicQuery(dynamicQuery);
         LOGGER.info("RESULTS COUNT: "+searchResult.size());
         return searchResult;
     }
 
-    private List<DynamicQueryParameter> createDynamicQuery(List<String> skillNames, List<String> experienceTimes) {
+    private List<DynamicQueryParameter> createDynamicQuery(List<String> skillNames, List<String> experienceTimes, List<String> skillLevels) {
         List<DynamicQueryParameter> dynamicQuery = new ArrayList<>();
 
         for (int i = 0; i < skillNames.size(); i++) {
-            DynamicQueryParameter queryParameter = DynamicQueryParameter.builder()
-                .skillName(skillNames.get(i))
-                .experienceTime(Integer.parseInt(experienceTimes.get(i)))
-                .build();
+            DynamicQueryParameter queryParameter = new DynamicQueryParameter();
+            queryParameter.setSkillName(skillNames.get(i));
+
+            if (isNotNullOrEmpty(experienceTimes)) {
+                queryParameter.setExperienceTime(Integer.parseInt(experienceTimes.get(i)));
+            }
+
+            if (isNotNullOrEmpty(skillLevels)) {
+                queryParameter.setSkillLevel(SkillLevel.valueOf(skillLevels.get(i).toUpperCase()));
+            }
 
             dynamicQuery.add(queryParameter);
         }
@@ -116,13 +108,6 @@ public class ConsultantsController {
             return false;
         }
         return (!array.isEmpty());
-    }
-
-    boolean isNullOrEmpty(List<String> array) {
-        if (array == null) {
-            return false;
-        }
-        return (array.isEmpty());
     }
 
 }
