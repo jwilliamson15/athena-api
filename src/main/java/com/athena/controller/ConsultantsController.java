@@ -1,6 +1,7 @@
 package com.athena.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.athena.dal.ConsultantDAL;
+import com.athena.dal.DynamicQueryParameter;
 import com.athena.model.Consultant;
 
 @RestController
@@ -41,39 +43,23 @@ public class ConsultantsController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public List<Consultant> getConsultantsBySkill(@RequestParam("skills") List<String> skillNames,
                                                   @RequestParam(name = "experience", required = false) List<String> experienceTimes) {
-        List<Consultant> searchResult;
+        List<Consultant> searchResult = new ArrayList<>();
 
         LOGGER.info("SKILLS SEARCHED: " + skillNames.toString());
         LOGGER.info("XP SEARCHED: " + experienceTimes.toString());
 
         if (skillNames.size() == 1) {
-            searchResult = consultantDAL.findBySkill(skillNames.get(0));
-            LOGGER.info("RESULTS COUNT: "+searchResult.size());
-            return searchResult;
+            searchResult = singleSkillSearch(skillNames.get(0));
         }
 
-        searchResult = consultantDAL.findMultipleSkills(skillNames);
-        LOGGER.info("RESULTS COUNT: "+searchResult.size());
+        if (isNullOrEmpty(experienceTimes)) {
+            searchResult = multiSkillSearch(skillNames);
+        }
+
+        searchResult = experienceSearch(createDynamicQuery(skillNames, experienceTimes));
+
         return searchResult;
     }
-
-    //TODO - advanced searches
-//    @RequestMapping(value = "/search", method = RequestMethod.GET)
-//    public List<Consultant> getConsultantsBySkillParam(@RequestParam("skills") List<String> skillNames,
-//                                                       @RequestParam(name = "experience", required = false) List<String> experienceTimes) {
-//        LOGGER.warn("Skill names: {}", skillNames.toString());
-//
-//        if (isNotNullOrEmpty(experienceTimes)) {
-//            return advancedQueries.searchWithExperienceQuery(skillNames, experienceTimes);
-//        }
-//
-//        //if skillsNames > 1
-//        if (skillNames.size() > 1) {
-//            return advancedQueries.searchForMultiSkillsOr(skillNames);
-//        }
-//
-//        return repository.findBySingleSkill(skillNames.get(0));
-//    }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public Consultant createConsultant(@Valid @RequestBody Consultant consultant) {
@@ -91,11 +77,52 @@ public class ConsultantsController {
         consultantDAL.deleteConsultant(consultantDAL.findById(id));
     }
 
+    private List<Consultant> singleSkillSearch(String skillName) {
+        List<Consultant> searchResult = consultantDAL.findBySkill(skillName);
+        LOGGER.info("RESULTS COUNT: "+searchResult.size());
+        return searchResult;
+    }
+
+    private List<Consultant> multiSkillSearch(List<String> skillNames) {
+        List<Consultant> searchResult = consultantDAL.findMultipleSkills(skillNames);
+        LOGGER.info("RESULTS COUNT: "+searchResult.size());
+        return searchResult;
+    }
+
+    private List<Consultant> experienceSearch(List<DynamicQueryParameter> dynamicQuery) {
+        LOGGER.info("DYNAMIC QUERY: "+dynamicQuery.toString());
+        List<Consultant> searchResult = consultantDAL.findBySkillAndExperienceTime(dynamicQuery);
+        LOGGER.info("RESULTS COUNT: "+searchResult.size());
+        return searchResult;
+    }
+
+    private List<DynamicQueryParameter> createDynamicQuery(List<String> skillNames, List<String> experienceTimes) {
+        List<DynamicQueryParameter> dynamicQuery = new ArrayList<>();
+
+        for (int i = 0; i < skillNames.size(); i++) {
+            DynamicQueryParameter queryParameter = DynamicQueryParameter.builder()
+                .skillName(skillNames.get(i))
+                .experienceTime(Integer.parseInt(experienceTimes.get(i)))
+                .build();
+
+            dynamicQuery.add(queryParameter);
+        }
+
+        return dynamicQuery;
+    }
+
     boolean isNotNullOrEmpty(List<String> array) {
         if (array == null) {
             return false;
         }
         return (!array.isEmpty());
+    }
+
+    boolean isNullOrEmpty(List<String> array) {
+        if (array == null) {
+            return false;
+        }
+        return (array.isEmpty());
     }
 
 }

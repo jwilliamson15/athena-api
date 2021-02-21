@@ -1,5 +1,6 @@
 package com.athena.dal;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -16,6 +17,7 @@ public interface ConsultantDAL {
     Consultant findById(ObjectId id);
     List<Consultant> findBySkill(String skillName);
     List<Consultant> findMultipleSkills(List<String> skillNames);
+    List<Consultant> findBySkillAndExperienceTime(List<DynamicQueryParameter> dynamicQuery);
 
     //update
     Consultant updateConsultant(Consultant consultant);
