@@ -1,4 +1,4 @@
-package com.athena.models;
+package com.athena.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ConsultantSkills {
+public class ConsultantSkill {
 
     //enum ExperienceLevel {BASELINE,PROGRESSING,PROFICIENT, EXPERIENCED, MASTER}
 
