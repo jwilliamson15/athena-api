@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import com.athena.dal.DynamicQueryParameter;
 import com.athena.model.Consultant;
 import com.athena.model.SkillLevel;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/consultants")
 public class ConsultantsController {
@@ -32,6 +34,7 @@ public class ConsultantsController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<Consultant> getAllConsultants() {
+        LOGGER.info("GET REQUEST");
         return consultantDAL.getAllConsultant();
     }
 
