@@ -6,6 +6,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 import com.athena.model.Consultant;
+import com.athena.model.SkillLevel;
 
 public interface ConsultantDAL {
 
@@ -15,9 +16,7 @@ public interface ConsultantDAL {
     //read
     List<Consultant> getAllConsultant();
     Consultant findById(ObjectId id);
-    List<Consultant> findBySkill(String skillName);
-    List<Consultant> findMultipleSkills(List<String> skillNames);
-    List<Consultant> findBySkillAndExperienceTime(List<DynamicQueryParameter> dynamicQuery);
+    List<Consultant> findByDynamicQuery(List<DynamicQueryParameter> dynamicQuery);
 
     //update
     Consultant updateConsultant(Consultant consultant);
