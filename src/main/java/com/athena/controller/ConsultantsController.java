@@ -35,6 +35,7 @@ public class ConsultantsController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<Consultant> getAllConsultants() {
         LOGGER.info("GET REQUEST");
+
         return consultantDAL.getAllConsultant();
     }
 
@@ -43,7 +44,12 @@ public class ConsultantsController {
         return consultantDAL.findById(id);
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    @RequestMapping(value = "/search")
+    public Consultant getConsultantByEmployeeNumber(@RequestParam("employeeNumber") String employeeNumber) {
+        return consultantDAL.findByEmployeeNumber(employeeNumber);
+    }
+
+    @RequestMapping(value = "/skills/search", method = RequestMethod.GET)
     public List<Consultant> getConsultantsBySkill(@RequestParam("skills") List<String> skillNames,
                                                   @RequestParam(name = "experience", required = false) List<String> experienceTimes,
                                                   @RequestParam(name = "skillLevel", required = false) List<String> skillLevels) {
@@ -99,6 +105,8 @@ public class ConsultantsController {
             if (isNotNullOrEmpty(skillLevels)) {
                 queryParameter.setSkillLevel(SkillLevel.valueOf(skillLevels.get(i).toUpperCase()));
             }
+
+            //TODO - add employeeNumber here
 
             dynamicQuery.add(queryParameter);
         }

@@ -16,6 +16,7 @@ public interface ConsultantDAL {
     //read
     List<Consultant> getAllConsultant();
     Consultant findById(ObjectId id);
+    Consultant findByEmployeeNumber(String employeeNumber);
     List<Consultant> findByDynamicQuery(List<DynamicQueryParameter> dynamicQuery);
 
     //update

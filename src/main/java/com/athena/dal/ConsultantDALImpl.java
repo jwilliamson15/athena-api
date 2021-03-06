@@ -48,6 +48,14 @@ public class ConsultantDALImpl implements ConsultantDAL {
     }
 
     @Override
+    public Consultant findByEmployeeNumber(String employeeNumber) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("employeeNumber").is(Integer.parseInt(employeeNumber)));
+
+        return mongoTemplate.findOne(query, Consultant.class);
+    }
+
+    @Override
     public List<Consultant> findByDynamicQuery(List<DynamicQueryParameter> dynamicQuery) {
         Query query = new Query();
         List<Criteria> criteria = new ArrayList<>();
