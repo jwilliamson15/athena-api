@@ -22,7 +22,7 @@ public class Consultant {
     public ObjectId _id;
 
     private String name;
-    private int employeeNumber;
+    private String employeeNumber;
     private String jobRole;
     private String personDescription;
 

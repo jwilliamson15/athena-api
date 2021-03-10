@@ -5,13 +5,14 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
+import com.athena.exception.ConflictException;
 import com.athena.model.Consultant;
 import com.athena.model.SkillLevel;
 
 public interface ConsultantDAL {
 
     //create
-    Consultant saveConsultant(Consultant consultant);
+    Consultant saveConsultant(Consultant consultant) throws ConflictException;
 
     //read
     List<Consultant> getAllConsultant();

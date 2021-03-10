@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.athena.dal.ConsultantDAL;
 import com.athena.dal.DynamicQueryParameter;
+import com.athena.exception.ConflictException;
 import com.athena.model.Consultant;
 import com.athena.model.SkillLevel;
 
@@ -71,7 +73,11 @@ public class ConsultantsController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public Consultant createConsultant(@Valid @RequestBody Consultant consultant) {
-        return consultantDAL.saveConsultant(consultant);
+        try {
+            return consultantDAL.saveConsultant(consultant);
+        } catch (ConflictException ex) {
+            throw new ResponseStatusException(ex.getHttpStatus(), ex.getMessage(), ex);
+        }
     }
 
     @RequestMapping(value = "/{employeeNumber}", method = RequestMethod.PUT)

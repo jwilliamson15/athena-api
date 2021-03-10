@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import static com.athena.Constants.REGEX_CASE_INSENSITIVE_OPTION;
+import com.athena.exception.ConflictException;
 import com.athena.model.Consultant;
 import com.athena.model.SkillLevel;
 
@@ -29,7 +30,13 @@ public class ConsultantDALImpl implements ConsultantDAL {
     }
 
     @Override
-    public Consultant saveConsultant(Consultant consultant) {
+    public Consultant saveConsultant(Consultant consultant) throws ConflictException {
+        Consultant existingConsultant = findByEmployeeNumber(consultant.getEmployeeNumber());
+
+        if (existingConsultant != null) {
+            throw new ConflictException();
+        }
+
         mongoTemplate.save(consultant);
         return consultant;
     }
@@ -50,7 +57,7 @@ public class ConsultantDALImpl implements ConsultantDAL {
     @Override
     public Consultant findByEmployeeNumber(String employeeNumber) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("employeeNumber").is(Integer.parseInt(employeeNumber)));
+        query.addCriteria(Criteria.where("employeeNumber").is(employeeNumber));
 
         return mongoTemplate.findOne(query, Consultant.class);
     }
