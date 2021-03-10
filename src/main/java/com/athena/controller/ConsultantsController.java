@@ -46,6 +46,7 @@ public class ConsultantsController {
 
     @RequestMapping(value = "/search")
     public Consultant getConsultantByEmployeeNumber(@RequestParam("employeeNumber") String employeeNumber) {
+        LOGGER.info("GET BY EMPLOYEE NUM REQUEST MADE FOR "+employeeNumber);
         return consultantDAL.findByEmployeeNumber(employeeNumber);
     }
 
@@ -73,10 +74,12 @@ public class ConsultantsController {
         return consultantDAL.saveConsultant(consultant);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public void modifyConsultantsById(@PathVariable("id") ObjectId id, @Valid @RequestBody Consultant consultant) {
-        consultant.set_id(id);
-        consultantDAL.updateConsultant(consultant);
+    @RequestMapping(value = "/{employeeNumber}", method = RequestMethod.PUT)
+    public void modifyConsultantsById(@PathVariable("employeeNumber") String empNum, @Valid @RequestBody Consultant updateConsultant) {
+        Consultant currentConsultant = consultantDAL.findByEmployeeNumber(empNum);
+
+        updateConsultant.set_id(currentConsultant._id);
+        consultantDAL.updateConsultant(updateConsultant);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -103,10 +106,12 @@ public class ConsultantsController {
             }
 
             if (isNotNullOrEmpty(skillLevels)) {
-                queryParameter.setSkillLevel(SkillLevel.valueOf(skillLevels.get(i).toUpperCase()));
-            }
+                SkillLevel skillLevelEnum = SkillLevel.valueOf(skillLevels.get(i).toUpperCase());
 
-            //TODO - add employeeNumber here
+                if (skillLevelEnum != SkillLevel.ANY) {
+                    queryParameter.setSkillLevel(skillLevelEnum);
+                }
+            }
 
             dynamicQuery.add(queryParameter);
         }

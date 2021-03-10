@@ -61,26 +61,27 @@ public class ConsultantDALImpl implements ConsultantDAL {
         List<Criteria> criteria = new ArrayList<>();
 
         for(DynamicQueryParameter queryParameter: dynamicQuery) {
-            List<Criteria> andCriteria = new ArrayList<>();
+            List<Criteria> skillCriteria = new ArrayList<>();
             if (queryParameter.getSkillName() != null) {
                 final String skillName = queryParameter.getSkillName();
-                andCriteria.add(Criteria.where("skills.name").regex(skillName, REGEX_CASE_INSENSITIVE_OPTION));
+                skillCriteria.add(Criteria.where("skills.name").regex(skillName, REGEX_CASE_INSENSITIVE_OPTION));
             }
 
             if (queryParameter.getExperienceTime() != null) {
                 final Integer experienceTime = queryParameter.getExperienceTime();
-                andCriteria.add(Criteria.where("skills.experienceTime").gte(experienceTime));
+                skillCriteria.add(Criteria.where("skills.experienceTime").gte(experienceTime));
             }
 
             if (queryParameter.getSkillLevel() != null) {
                 final SkillLevel skillLevel = queryParameter.getSkillLevel();
-                andCriteria.add(Criteria.where("skills.skillLevel").is(skillLevel));
+                skillCriteria.add(Criteria.where("skills.skillLevel").is(skillLevel));
             }
 
-            criteria.add(new Criteria().andOperator(andCriteria.toArray(new Criteria[andCriteria.size()])));
+            criteria.add(new Criteria().andOperator(skillCriteria.toArray(new Criteria[skillCriteria.size()])));
         }
 
-        query.addCriteria(new Criteria().orOperator(criteria.toArray(new Criteria[criteria.size()])));
+        //TODO - and or or?
+        query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
         LOGGER.info("QUERY: " + query.toString());
 
         return mongoTemplate.find(query, Consultant.class);
