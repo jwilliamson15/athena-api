@@ -88,9 +88,9 @@ public class ConsultantsController {
         consultantDAL.updateConsultant(updateConsultant);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void deleteConsultant(@PathVariable ObjectId id) {
-        consultantDAL.deleteConsultant(consultantDAL.findById(id));
+    @RequestMapping(value = "/{employeeNumber}", method = RequestMethod.DELETE)
+    public void deleteConsultant(@PathVariable String employeeNumber) {
+        consultantDAL.deleteConsultant(consultantDAL.findByEmployeeNumber(employeeNumber));
     }
 
     private List<Consultant> dynamicSearch(List<DynamicQueryParameter> dynamicQuery) {
