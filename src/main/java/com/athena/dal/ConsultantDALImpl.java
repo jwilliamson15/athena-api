@@ -87,7 +87,6 @@ public class ConsultantDALImpl implements ConsultantDAL {
             criteria.add(new Criteria().andOperator(skillCriteria.toArray(new Criteria[skillCriteria.size()])));
         }
 
-        //TODO - and or or?
         query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
         LOGGER.info("QUERY: " + query.toString());
 
