@@ -34,6 +34,10 @@ public class ConsultantsController {
     @Autowired
     private ConsultantDAL consultantDAL;
 
+    public ConsultantsController(ConsultantDAL consultantDAL) {
+        this.consultantDAL = consultantDAL;
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<Consultant> getAllConsultants() {
         LOGGER.info("GET REQUEST");
@@ -81,7 +85,7 @@ public class ConsultantsController {
     }
 
     @RequestMapping(value = "/{employeeNumber}", method = RequestMethod.PUT)
-    public void modifyConsultantsById(@PathVariable("employeeNumber") String empNum, @Valid @RequestBody Consultant updateConsultant) {
+    public void modifyConsultantsByEmployeeNumber(@PathVariable("employeeNumber") String empNum, @Valid @RequestBody Consultant updateConsultant) {
         Consultant currentConsultant = consultantDAL.findByEmployeeNumber(empNum);
 
         updateConsultant.set_id(currentConsultant._id);
