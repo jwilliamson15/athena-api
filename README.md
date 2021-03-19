@@ -10,3 +10,6 @@ Final Project for Uni
 
 ## User Interface (Optional)
 This API is best utilised alongside the UI (athena-ui) found [here](https://github.com/jwilliamson15/athena-ui)
+
+### Running
+- Run using `./mvnw spring-boot:run`
