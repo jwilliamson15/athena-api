@@ -88,7 +88,7 @@ public class ConsultantDALImpl implements ConsultantDAL {
         }
 
         query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
-        LOGGER.info("QUERY: " + query.toString());
+        LOGGER.info("DYNAMIC QUERY: " + query.toString());
 
         return mongoTemplate.find(query, Consultant.class);
     }
